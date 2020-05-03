@@ -17,8 +17,8 @@ to create a wrapper file, and add
 ```
   ...
   "exports": {
-    "require": "<same file as 'main'>",
-    "import": "path/to/wrapper/output.mjs"
+    "require": "./<same file as 'main'>",
+    "import": "./path/to/wrapper/output.mjs"
   }
   ...
 ```
