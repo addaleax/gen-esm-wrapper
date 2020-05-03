@@ -12,7 +12,8 @@ if (typeof source !== 'string' || typeof target !== 'string') {
   return;
 }
 
-const mod = require(resolve(source));
+const cjsSource = require.resolve(resolve(source));
+const mod = require(cjsSource);
 const keys = new Set(Object.getOwnPropertyNames(mod));
 
 if (typeof mod === 'function') {
@@ -22,13 +23,13 @@ if (typeof mod === 'function') {
   keys.clear();
 }
 
-let relPath = relative(target === '-' ? './' : dirname(target), source)
+let relPath =
+  relative(resolve(target === '-' ? './' : dirname(target)), cjsSource)
   .replace(/\\/g, '/');
 if (!relPath.startsWith('./') && !relPath.startsWith('../') && relPath != '..')
   relPath = `./${relPath}`;
 
-let output = `import { createRequire } from 'module';
-const mod = createRequire(import.meta.url)(${JSON.stringify(relPath)});
+let output = `import mod from ${JSON.stringify(relPath)};
 
 `;
 

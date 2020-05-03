@@ -1,4 +1,3 @@
-import { createRequire } from 'module';
-const mod = createRequire(import.meta.url)("../index.js");
+import mod from "../index.js";
 
 export default mod;
