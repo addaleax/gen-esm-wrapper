@@ -27,7 +27,9 @@ let relPath = relative(target === '-' ? './' : dirname(target), source)
 if (!relPath.startsWith('./') && !relPath.startsWith('../') && relPath != '..')
   relPath = `./${relPath}`;
 
-let output = `import mod from './${relPath}';`
+let output = `import mod from './${relPath}';
+
+`
 
 if (!keys.has('default')) {
   output += 'export default mod;\n';
