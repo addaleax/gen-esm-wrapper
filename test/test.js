@@ -4,6 +4,8 @@ const fs = require('fs');
 const { resolve } = require('path');
 const { execFileSync } = require('child_process');
 
+const updateSnapshots = process.argv[2] === 'update-snapshots';
+
 for (const dir of fs.readdirSync(resolve(__dirname, 'fixtures'))) {
   console.log(`Testing in directory ${dir}`);
   execFileSync(process.execPath, [
@@ -14,7 +16,12 @@ for (const dir of fs.readdirSync(resolve(__dirname, 'fixtures'))) {
 
   const actual = fs.readFileSync(
     resolve(__dirname, `fixtures/${dir}/out/wrapper.mjs`), 'utf8');
-  const expected = fs.readFileSync(
-    resolve(__dirname, `fixtures/${dir}/wrapper.mjs`), 'utf8');
-  assert.strictEqual(actual, expected);
+  if (updateSnapshots) {
+    fs.writeFileSync(
+      resolve(__dirname, `fixtures/${dir}/wrapper.mjs`), actual);
+  } else {
+    const expected = fs.readFileSync(
+      resolve(__dirname, `fixtures/${dir}/wrapper.mjs`), 'utf8');
+    assert.strictEqual(actual, expected);
+  }
 }
