@@ -10,12 +10,17 @@
     "update-snapshots": "node test/test.js update-snapshots"
   },
   "keywords": [],
-  "author": "",
+  "author": "Anna Henningsen <anna@addaleax.net>",
   "license": "MIT",
   "dependencies": {
     "is-valid-identifier": "^2.0.2"
   },
   "devDependencies": {
     "nyc": "^15.0.1"
+  },
+  "homepage": "https://github.com/addaleax/gen-esm-wrapper",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/addaleax/gen-esm-wrapper.git"
   }
 }
