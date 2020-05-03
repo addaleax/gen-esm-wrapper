@@ -28,5 +28,5 @@ ESM/CJS package.
 The command can also be added as a build step before publishing.
 
 Note that adding `exports:` to your `package.json` is
-[potentially a breaking change][https://medium.com/javascript-in-plain-english/is-promise-post-mortem-cab807f18dcc]
+[potentially a breaking change](https://medium.com/javascript-in-plain-english/is-promise-post-mortem-cab807f18dcc)
 because it restricts the ways in which consumers can `require()` your module.
