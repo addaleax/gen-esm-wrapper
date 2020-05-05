@@ -46,3 +46,32 @@ if there are no other JavaScript files that can be required from the package
 besides the main entry point (e.g. a file named `foo.js` that can be loaded
 through `require('package/foo')`), or if you are okay with breaking
 `require()` calls to those modules.
+
+## Example project
+
+There is a minimal example in the `example-project` directory in this
+repository. This is its package.json:
+
+```js
+{
+  "name": "example-project",
+  "version": "1.0.0",
+  "description": "Example project for gen-esm-wrapper",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "require": "./index.js",
+      "import": "./dist/output.mjs"
+    },
+    "./": "./"
+  },
+  "scripts": {
+    "test": "npm run build && node ./dist/output.mjs",
+    "build": "gen-esm-wrapper . ./dist/output.mjs",
+    "prepack": "npm run build"
+  },
+  "devDependencies": {
+    "gen-esm-wrapper": "^1.0.4"
+  }
+}
+```

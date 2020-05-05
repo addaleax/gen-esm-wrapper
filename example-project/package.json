@@ -1,0 +1,21 @@
+{
+  "name": "example-project",
+  "version": "1.0.0",
+  "description": "Example project for gen-esm-wrapper",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "require": "./index.js",
+      "import": "./dist/output.mjs"
+    },
+    "./": "./"
+  },
+  "scripts": {
+    "test": "npm run build && node ./dist/output.mjs",
+    "build": "gen-esm-wrapper . ./dist/output.mjs",
+    "prepack": "npm run build"
+  },
+  "devDependencies": {
+    "gen-esm-wrapper": "^1.0.4"
+  }
+}
