@@ -1,6 +1,6 @@
 {
   "name": "gen-esm-wrapper",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Generate ESM wrapper files for CommonJS modules",
   "bin": {
     "gen-esm-wrapper": "./gen-esm-wrapper.js"
