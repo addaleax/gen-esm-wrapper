@@ -45,7 +45,8 @@ The above example `"exports":` key can be simplified to
 if there are no other JavaScript files that can be required from the package
 besides the main entry point (e.g. a file named `foo.js` that can be loaded
 through `require('package/foo')`), or if you are okay with breaking
-`require()` calls to those modules.
+`require()` calls to those modules. This is the recommended approach for new
+modules that are being published for the first time.
 
 ## Example project
 
