@@ -7,7 +7,7 @@ const fs = require('fs');
 const source = process.argv[2];
 const target = process.argv[3] || '-';
 
-if (typeof source !== 'string' || typeof target !== 'string') {
+if (typeof source !== 'string') {
   console.error('Usage: esm-wrapper-gen <path-to-module> <path-to-output>');
   return;
 }
