@@ -43,3 +43,6 @@ for (const dir of fs.readdirSync(resolve(__dirname, 'fixtures'))) {
     assert.strictEqual(Buffer.from(expected).equals(outputWithoutTarget), true);
   }
 }
+
+// run --exclude option tests as well
+require('./exclude/test');

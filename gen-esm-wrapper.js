@@ -5,11 +5,33 @@ const { resolve, relative, dirname } = require('path');
 const fs = require('fs');
 
 const source = process.argv[2];
-const target = process.argv[3] || '-';
+let target = process.argv[3] || '-';
+let exclude = process.argv[4] || '';
 
-if (typeof source !== 'string') {
-  console.error('Usage: esm-wrapper-gen <path-to-module> <path-to-output>');
+if (target.startsWith('--')) {
+  exclude = target;
+  target = '-';
+}
+
+if (typeof source !== 'string' || exclude && !exclude.startsWith('--exclude=')) {
+  console.error('Usage: gen-esm-wrapper <path-to-module> <path-to-output> [options]');
+  console.error();
+  console.error('Options:');
+  console.error();
+  console.error('    --exclude=regexp\tomit matching keys from the output');
+  process.exitCode = 1;
   return;
+}
+else if (exclude) {
+  try {
+    // '--exclude='.length === 10
+    exclude = new RegExp(exclude.substring(10));
+  }
+  catch (ex) {
+    console.error('Invalid regular expression provided for --exclude');
+    process.exitCode = 1;
+    return;
+  }
 }
 
 const cjsSource = require.resolve(resolve(source));
@@ -22,6 +44,11 @@ if (typeof mod === 'function') {
 } else if (typeof mod !== 'object' || mod === null) {
   keys.clear();
 }
+
+if (exclude)
+  for (const key of keys)
+    if (exclude.test(key))
+      keys.delete(key);
 
 let relPath =
   relative(resolve(target === '-' ? './' : dirname(target)), cjsSource)
