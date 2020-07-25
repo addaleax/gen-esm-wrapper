@@ -45,4 +45,4 @@ for (const dir of fs.readdirSync(resolve(__dirname, 'fixtures'))) {
 }
 
 // run --exclude option tests as well
-require('./exclude/test')
+require('./exclude/test');

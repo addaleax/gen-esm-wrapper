@@ -19,6 +19,7 @@ if (typeof source !== 'string' || exclude && !exclude.startsWith('--exclude=')) 
   console.error('Options:');
   console.error();
   console.error('    --exclude=regexp\tomit matching keys from the output');
+  process.exitCode = 1;
   return;
 }
 else if (exclude) {
@@ -28,6 +29,7 @@ else if (exclude) {
   }
   catch (ex) {
     console.error('Invalid regular expression provided for --exclude');
+    process.exitCode = 1;
     return;
   }
 }

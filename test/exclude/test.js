@@ -1,42 +1,39 @@
-const assert = require('assert'),
-      { readFileSync } = require('fs'),
-      { exec } = require('child_process'),
-      { resolve } = require('path'),
-      { execPath } = process,
-      binPath = resolve(__dirname, '..', '..', 'gen-esm-wrapper.js'),
-      inputPath = resolve(__dirname, 'fixtures', 'input.js');
+const assert = require('assert');
+const { readFileSync } = require('fs');
+const util = require('util');
+const execFile = util.promisify(require('child_process').execFile);
+const { resolve } = require('path');
+const { execPath } = process;
 
-function run(...args) {
-    return new Promise((resolve, reject) => 
-        exec([ execPath, binPath, inputPath, ...args ].join(' '), (err, stdout, stderr) => {
-            if (err || stderr)
-                reject(err || stderr);
-            else
-                resolve(stdout);
-        }));
+const binPath = resolve(__dirname, '..', '..', 'gen-esm-wrapper.js');
+const inputPath = resolve(__dirname, 'fixtures', 'input.js');
+
+async function run(...args) {
+  const result = await execFile(execPath, [ binPath, inputPath, ...args ]);
+  return result.stdout;
 }
 
 function readFixture(name) {
-    return readFileSync(resolve(__dirname, 'fixtures', name), 'utf8');
+  return readFileSync(resolve(__dirname, 'fixtures', name), 'utf8');
 }
 
 (async () => {
-    console.log('Running --exclude option tests');
+  console.log('Running --exclude option tests');
 
-    assert.strictEqual(await run(), readFixture('stdout.mjs'));
-    assert.strictEqual(await run('-'), readFixture('stdout.mjs'));
-    await run(resolve(__dirname, 'fixtures', 'wrapper.mjs'));
-    assert.strictEqual(readFixture('wrapper.mjs'), readFixture('file.mjs'));
+  assert.strictEqual(await run(), readFixture('stdout.mjs'));
+  assert.strictEqual(await run('-'), readFixture('stdout.mjs'));
+  await run(resolve(__dirname, 'fixtures', 'wrapper.mjs'));
+  assert.strictEqual(readFixture('wrapper.mjs'), readFixture('file.mjs'));
 
-    assert.strictEqual(await run('--exclude=^_'), readFixture('stdout-excluded.mjs'));
-    assert.strictEqual(await run('-', '--exclude=^_'), readFixture('stdout-excluded.mjs'));
-    await run(resolve(__dirname, 'fixtures', 'wrapper-excluded.mjs'), '--exclude=^_');
-    assert.strictEqual(readFixture('wrapper-excluded.mjs'), readFixture('file-excluded.mjs'));
+  assert.strictEqual(await run('--exclude=^_'), readFixture('stdout-excluded.mjs'));
+  assert.strictEqual(await run('-', '--exclude=^_'), readFixture('stdout-excluded.mjs'));
+  await run(resolve(__dirname, 'fixtures', 'wrapper-excluded.mjs'), '--exclude=^_');
+  assert.strictEqual(readFixture('wrapper-excluded.mjs'), readFixture('file-excluded.mjs'));
 
-    assert.rejects(() => run('--invalidArg'));
-    assert.rejects(() => run('-', '--invalidArg'));
-    assert.rejects(() => run('-', '--exclude=\\\\'));
-})().catch(err => { 
-    console.error(err);
-    process.exit(1);
- });
+  await assert.rejects(() => run('--invalidArg'));
+  await assert.rejects(() => run('-', '--invalidArg'));
+  await assert.rejects(() => run('-', '--exclude=\\'));
+})().catch(err => {
+  console.error(err);
+  process.exitCode = 1;
+});
