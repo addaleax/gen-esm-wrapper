@@ -61,7 +61,7 @@ let output = `import mod from ${JSON.stringify(relPath)};
 `;
 
 output += 'export default mod;\n';
-for (const key of keys) {
+for (const key of [...keys].sort()) {
   if (isValidIdentifier(key)) {
     output += `export const ${key} = mod.${key};\n`;
   }
