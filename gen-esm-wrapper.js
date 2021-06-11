@@ -38,6 +38,9 @@ const cjsSource = require.resolve(resolve(source));
 const mod = require(cjsSource);
 const keys = new Set(Object.getOwnPropertyNames(mod));
 
+// https://github.com/addaleax/gen-esm-wrapper/issues/6
+keys.delete('__esModule');
+
 if (typeof mod === 'function') {
   for (const key of ['length', 'prototype', 'name', 'caller'])
     keys.delete(key);
