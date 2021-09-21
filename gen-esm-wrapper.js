@@ -63,7 +63,11 @@ let output = `import mod from ${JSON.stringify(relPath)};
 
 `;
 
-output += 'export default mod;\n';
+if (mod.__esModule && keys.has('default')) {
+  output += 'export default mod["default"];\n';
+} else {
+  output += 'export default mod;\n';
+}
 for (const key of [...keys].sort()) {
   if (isValidIdentifier(key)) {
     output += `export const ${key} = mod.${key};\n`;
